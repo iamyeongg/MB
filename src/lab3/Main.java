@@ -3,17 +3,170 @@ package lab3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+import java.util.Random; //V8
 public class Main {
-    static int[][] arrayBlk = {
-            { 0, 0, 1, 0 },
-            { 0, 0, 1, 0 },
-            { 0, 0, 1, 0 },
-            { 0, 0, 1, 0 },
-    };
+    static Random random = new Random();// 프로그램 시작시 한번만 호출
+    private static int[][][][] setOfBlockArrays = { // [7][4][?][?]
+            //7개의 블록의 회전 상태를 표현 : 객체 28개
+            {
+                    {
+                            { 1, 1 },
+                            { 1, 1 }
+                    },
+                    {
+                            { 1, 1 },
+                            { 1, 1 }
+                    },
+                    {
+                            { 1, 1 },
+                            { 1, 1 }
+                    },
+                    {
+                            { 1, 1 },
+                            { 1, 1 }
+                    }
+            },
+            {
+                    {
+                            {0, 1, 0},
+                            {1, 1, 1},
+                            {0, 0, 0},
+                    },
+                    {
+                            {0, 1, 0},
+                            {0, 1, 1},
+                            {0, 1, 0},
+                    },
+                    {
+                            {0, 0, 0},
+                            {1, 1, 1},
+                            {0, 1, 0},
+                    },
+                    {
+                            {0, 1, 0},
+                            {1, 1, 0},
+                            {0, 1, 0},
+                    },
+            },
+            {
+                    {
+                            {1, 0, 0},
+                            {1, 1, 1},
+                            {0, 0, 0},
+                    },
+                    {
+                            {0, 1, 1},
+                            {0, 1, 0},
+                            {0, 1, 0},
+                    },
+                    {
+                            {0, 0, 0},
+                            {1, 1, 1},
+                            {0, 0, 1},
+                    },
+                    {
+                            {0, 1, 0},
+                            {0, 1, 0},
+                            {1, 1, 0},
+                    },
+            },
+            {
+                    {
+                            {0, 0, 1},
+                            {1, 1, 1},
+                            {0, 0, 0},
+                    },
+                    {
+                            {0, 1, 0},
+                            {0, 1, 0},
+                            {0, 1, 1},
+                    },
+                    {
+                            {0, 0, 0},
+                            {1, 1, 1},
+                            {1, 0, 0},
+                    },
+                    {
+                            {1, 1, 0},
+                            {0, 1, 0},
+                            {0, 1, 0},
+                    },
+            },
+            {
+                    {
+                            {0, 1, 0},
+                            {1, 1, 0},
+                            {1, 0, 0},
+                    },
+                    {
+                            {1, 1, 0},
+                            {0, 1, 1},
+                            {0, 0, 0},
+                    },
+                    {
+                            {0, 1, 0},
+                            {1, 1, 0},
+                            {1, 0, 0},
+                    },
+                    {
+                            {1, 1, 0},
+                            {0, 1, 1},
+                            {0, 0, 0},
+                    },
+            },
+            {
+                    {
+                            {0, 1, 0},
+                            {0, 1, 1},
+                            {0, 0, 1},
+                    },
+                    {
+                            {0, 0, 0},
+                            {0, 1, 1},
+                            {1, 1, 0},
+                    },
+                    {
+                            {0, 1, 0},
+                            {0, 1, 1},
+                            {0, 0, 1},
+                    },
+                    {
+                            {0, 0, 0},
+                            {0, 1, 1},
+                            {1, 1, 0},
+                    },
+            },
+            {
+                    {
+                            {0, 0, 0, 0},
+                            {1, 1, 1, 1},
+                            {0, 0, 0, 0},
+                            {0, 0, 0, 0},
+                    },
+                    {
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                    },
+                    {
+                            {0, 0, 0, 0},
+                            {1, 1, 1, 1},
+                            {0, 0, 0, 0},
+                            {0, 0, 0, 0},
+                    },
+                    {
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                            {0, 1, 0, 0},
+                    },
+            },
+    }; // end of setOfBlockArrays
     private static int iScreenDy = 15;
     private static int iScreenDx = 10;
     private static int iScreenDw = 4; // large enough to cover the largest block
+    // 블록과 벽으로 초기화된 배열을 반환: 초기화면
     private static int[][] createArrayScreen(int dy, int dx, int dw) {
         int y, x;
         int[][] array = new int[dy + dw][dx + 2*dw];
@@ -28,6 +181,7 @@ public class Main {
                 array[y][x] = 1;
         return array;
     }
+    //행렬을 콘솔에 출력하는 메서드를 정의
     public static void drawMatrix(Matrix m) {
         int dy = m.get_dy();
         int dx = m.get_dx();
@@ -44,6 +198,7 @@ public class Main {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String line = null;
     private static int nKeys = 0;
+    //키보드 입력을 처리하는 메서드 getKey를 정의
     private static char getKey() throws IOException {
         char ch;
         if (nKeys != 0) {
@@ -63,6 +218,7 @@ public class Main {
         boolean newBlockNeeded = false;
         int top = 0;
         int left = iScreenDw + iScreenDx/2 - 2;
+        //
         int[][] arrayScreen = createArrayScreen(iScreenDy, iScreenDx, iScreenDw);
         char key;
         Matrix iScreen = new Matrix(arrayScreen);
