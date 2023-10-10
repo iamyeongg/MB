@@ -1,6 +1,6 @@
-﻿package lab2;
+package lab2;
+import lab1.Matrix;
 
-import
 
 public class Main {
     public static void main(String[] args) throws Exception { // why "throws Exception"???
@@ -22,18 +22,10 @@ public class Main {
                 { 1, 1, 1 },
                 { 0, 0, 0 }
         };
-        try {
-            Matrix currBlk = new Matrix(arrayBlk);
-            //Matrix tempBlk = new Matrix(5,5);
-            Matrix tempBlk = new Matrix(-1,-1); // falls into the second catch
-            tempBlk = tempBlk.add(currBlk); // falls into the first catch
-        } catch(MismatchedMatrixException e) {
-            e.printStackTrace();
-            System.out.println("at first catch: " + e.getMessage());
-        } catch(MatrixException e) {
-            e.printStackTrace();
-            System.out.println("at second catch: " + e.getMessage());
-        }
+        Matrix currBlk = new Matrix(arrayBlk);
+        //Matrix tempBlk = new Matrix(5,5);
+        Matrix tempBlk = new Matrix(-1,-1); // falls into the second catch
+        tempBlk = tempBlk.add(currBlk); // falls into the first catch
     }
 
     public static void main3(String[] args) throws Exception { // why "throws Exception"???

@@ -1,4 +1,5 @@
-package lab2;
+package lab3;
+
 public class Matrix {
     private static int nAlloc = 0;
     private static int nFree = 0;
@@ -47,7 +48,7 @@ public class Matrix {
         Matrix temp = new Matrix(cy, cx);
         for(int y = 0; y < cy; y++){
             for(int x = 0; x < cx; x++){
-                if((top+y >= 0) && (left+x >= 0) && (top+y < dy) && (left+x < dx))
+                if((top+y >= 0) && (left+x >= 0) &&	(top+y < dy) && (left+x < dx))
                     temp.array[y][x] = array[top+y][left+x];
                 else
                     throw new MatrixException("invalid matrix range");
@@ -58,7 +59,7 @@ public class Matrix {
     public void paste(Matrix obj, int top, int left) throws MatrixException {
         for(int y = 0; y < obj.dy; y++)
             for(int x = 0; x < obj.dx; x++) {
-                if((top+y >= 0) && (left+x >= 0) && (top+y < dy) && (left+x < dx))
+                if((top+y >= 0) && (left+x >= 0) &&	(top+y < dy) && (left+x < dx))
                     array[y + top][x + left] = obj.array[y][x];
                 else
                     throw new MatrixException("invalid matrix range");
@@ -84,14 +85,6 @@ public class Matrix {
         for(int y = 0; y < dy; y++)
             for(int x = 0; x < dx; x++)
                 array[y][x] = coef * array[y][x];
-    }
-    Matrix int2bool() throws Exception {
-        Matrix temp = new Matrix(dy, dx);
-        int[][] t_array = temp.get_array();
-        for (int y = 0; y < dy; y++)
-            for (int x = 0; x < dx; x++)
-                t_array[y][x] = (array[y][x] != 0 ? 1 : 0);
-        return temp;
     }
     public boolean anyGreaterThan(int val){
         for(int y = 0; y < array.length; y++){
